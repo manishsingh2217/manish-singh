@@ -88,25 +88,30 @@ const ProfileCard = () => {
       )}
 
       {/* CTA Buttons */}
-      <div className="flex flex-row gap-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full">
         <Button
           variant="outline"
           size="sm"
-          className="flex-1 border-border/50 hover:bg-secondary/50 text-xs lg:text-sm px-2 lg:px-4"
+          className="w-full min-w-0 border-border/50 hover:bg-secondary/50 px-2 text-xs whitespace-normal gap-1"
           asChild
         >
-          <a href={personalInfo.cv_url || '#'} target="_blank" rel="noopener noreferrer">
-            <Download className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2 flex-shrink-0" />
-            <span className="truncate">Download CV</span>
+          <a
+            href={personalInfo.cv_url || '#'}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-1 min-w-0 w-full text-center"
+          >
+            <Download className="w-4 h-4 shrink-0" />
+            <span className="leading-tight">Download CV</span>
           </a>
         </Button>
         <Button
           size="sm"
-          className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground text-xs lg:text-sm px-2 lg:px-4"
+          className="w-full min-w-0 bg-primary hover:bg-primary/90 text-primary-foreground px-2 text-xs whitespace-normal gap-1"
           onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
         >
-          <Mail className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2 flex-shrink-0" />
-          <span className="truncate">Contact Me</span>
+          <Mail className="w-4 h-4 shrink-0" />
+          <span className="leading-tight text-center">Contact Me</span>
         </Button>
       </div>
     </motion.div>
