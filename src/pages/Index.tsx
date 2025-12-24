@@ -1,43 +1,69 @@
 import { Helmet } from 'react-helmet-async';
-import Navbar from '@/components/Navbar';
-import HeroSection from '@/components/HeroSection';
-import AboutSection from '@/components/AboutSection';
-import SkillsSection from '@/components/SkillsSection';
-import ProjectsSection from '@/components/ProjectsSection';
-import ExperienceSection from '@/components/ExperienceSection';
-import ServicesSection from '@/components/ServicesSection';
-import ContactSection from '@/components/ContactSection';
-import Footer from '@/components/Footer';
-import { personalInfo } from '@/data/cms';
+import { Link } from 'react-router-dom';
+import { Settings } from 'lucide-react';
+import ProfileCard from '@/components/ProfileCard';
+import MainContent from '@/components/MainContent';
+import { usePersonalInfo } from '@/hooks/useCMSData';
+import { useAuth } from '@/hooks/useAuth';
+import { Button } from '@/components/ui/button';
 
 const Index = () => {
+  const { data: personalInfo } = usePersonalInfo();
+  const { user, isAdmin } = useAuth();
+
   return (
     <>
       <Helmet>
-        <title>{personalInfo.name} | Data Scientist & Data Analyst Portfolio</title>
-        <meta name="description" content={personalInfo.bio.substring(0, 160)} />
+        <title>{personalInfo?.name || 'Manish Singh'} | Data Scientist & Data Analyst Portfolio</title>
+        <meta name="description" content={personalInfo?.bio?.substring(0, 160) || 'Data Scientist and Data Analyst portfolio'} />
         <meta name="keywords" content="Data Scientist, Data Analyst, Power BI, Python, SQL, Machine Learning, Portfolio" />
-        <meta property="og:title" content={`${personalInfo.name} - Data Scientist Portfolio`} />
-        <meta property="og:description" content={personalInfo.bio.substring(0, 160)} />
+        <meta property="og:title" content={`${personalInfo?.name || 'Manish Singh'} - Data Scientist Portfolio`} />
+        <meta property="og:description" content={personalInfo?.bio?.substring(0, 160) || 'Data Scientist portfolio'} />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={`${personalInfo.name} - Data Scientist`} />
-        <meta name="twitter:description" content={personalInfo.bio.substring(0, 160)} />
+        <meta name="twitter:title" content={`${personalInfo?.name || 'Manish Singh'} - Data Scientist`} />
+        <meta name="twitter:description" content={personalInfo?.bio?.substring(0, 160) || 'Data Scientist portfolio'} />
         <link rel="canonical" href="https://manish-singh.com" />
       </Helmet>
 
-      <div className="min-h-screen bg-background overflow-x-hidden">
-        <Navbar />
-        <main>
-          <HeroSection />
-          <AboutSection />
-          <SkillsSection />
-          <ProjectsSection />
-          <ExperienceSection />
-          <ServicesSection />
-          <ContactSection />
-        </main>
-        <Footer />
+      <div className="min-h-screen bg-background">
+        {/* Admin Link */}
+        {user && isAdmin && (
+          <div className="fixed top-4 right-4 z-50">
+            <Button variant="outline" size="sm" asChild>
+              <Link to="/admin">
+                <Settings className="w-4 h-4 mr-2" />
+                Admin
+              </Link>
+            </Button>
+          </div>
+        )}
+
+        <div className="container mx-auto px-4 py-8 lg:py-16">
+          <div className="flex flex-col lg:flex-row gap-8">
+            {/* Left Sidebar - Profile Card */}
+            <aside className="lg:w-80 lg:flex-shrink-0">
+              <div className="lg:sticky lg:top-8">
+                <ProfileCard />
+              </div>
+            </aside>
+
+            {/* Main Content */}
+            <main className="flex-1 min-w-0">
+              <MainContent />
+            </main>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <footer className="border-t border-border/50 py-8 mt-16">
+          <div className="container mx-auto px-4 text-center text-muted-foreground">
+            <p>© {new Date().getFullYear()} {personalInfo?.name || 'Manish Singh'}. All rights reserved.</p>
+            <Link to="/auth" className="text-primary hover:underline text-sm mt-2 inline-block">
+              Admin Login
+            </Link>
+          </div>
+        </footer>
       </div>
     </>
   );
