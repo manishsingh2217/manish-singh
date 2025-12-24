@@ -88,10 +88,10 @@ const ProfileCard = () => {
       )}
 
       {/* CTA Buttons */}
-      <div className="flex gap-3">
+      <div className="flex flex-col sm:flex-row lg:flex-col xl:flex-row gap-2 sm:gap-3">
         <Button
           variant="outline"
-          className="flex-1 border-border/50 hover:bg-secondary/50"
+          className="flex-1 border-border/50 hover:bg-secondary/50 text-sm"
           asChild
         >
           <a href={personalInfo.cv_url || '#'} target="_blank" rel="noopener noreferrer">
@@ -100,7 +100,7 @@ const ProfileCard = () => {
           </a>
         </Button>
         <Button
-          className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground"
+          className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground text-sm"
           onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
         >
           <Mail className="w-4 h-4 mr-2" />

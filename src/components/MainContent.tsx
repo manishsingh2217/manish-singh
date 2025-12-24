@@ -9,7 +9,7 @@ import { usePersonalInfo, useProjects, useExperiences, useSkills } from '@/hooks
 import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from 'sonner';
 
-const INITIAL_PROJECTS_SHOWN = 4;
+const INITIAL_PROJECTS_SHOWN = 2;
 
 const TypewriterText = ({ texts }: { texts: string[] }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -90,7 +90,7 @@ const MainContent = () => {
           </div>
         ) : personalInfo && (
           <>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold leading-tight">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-display font-bold leading-tight">
               I'm {personalInfo.name},
               <br />
               <TypewriterText texts={personalInfo.roles || ['Data Scientist']} />
@@ -103,30 +103,30 @@ const MainContent = () => {
             </p>
 
             {/* Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-4">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 pt-4">
               <div>
-                <div className="text-3xl md:text-4xl font-display font-bold text-foreground">
+                <div className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-foreground">
                   {personalInfo.stats_projects}+
                 </div>
-                <div className="text-sm text-muted-foreground">Completed Projects</div>
+                <div className="text-xs sm:text-sm text-muted-foreground">Completed Projects</div>
               </div>
               <div>
-                <div className="text-3xl md:text-4xl font-display font-bold text-foreground">
+                <div className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-foreground">
                   {personalInfo.stats_experience}
                 </div>
-                <div className="text-sm text-muted-foreground">Years of Experience</div>
+                <div className="text-xs sm:text-sm text-muted-foreground">Years of Experience</div>
               </div>
               <div>
-                <div className="text-3xl md:text-4xl font-display font-bold text-foreground">
+                <div className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-foreground">
                   {personalInfo.stats_clients}+
                 </div>
-                <div className="text-sm text-muted-foreground">Happy Clients</div>
+                <div className="text-xs sm:text-sm text-muted-foreground">Happy Clients</div>
               </div>
               <div>
-                <div className="text-3xl md:text-4xl font-display font-bold text-foreground">
+                <div className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-foreground">
                   {personalInfo.stats_awards}+
                 </div>
-                <div className="text-sm text-muted-foreground">Awards Received</div>
+                <div className="text-xs sm:text-sm text-muted-foreground">Awards Received</div>
               </div>
             </div>
           </>
@@ -319,13 +319,13 @@ const MainContent = () => {
         </div>
 
         {loadingSkills ? (
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
             {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
               <Skeleton key={i} className="h-24 w-full rounded-xl" />
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
             {skills?.map((skill) => {
               const Icon = getIcon(skill.icon);
               return (
@@ -365,7 +365,7 @@ const MainContent = () => {
           <h3 className="text-2xl font-display font-bold text-center">Let's Get in Touch!</h3>
 
           {personalInfo && (
-            <div className="grid md:grid-cols-3 gap-4">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
               <div className="flex items-center gap-3 p-4 rounded-lg bg-secondary/30">
                 <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
                   <Phone className="w-5 h-5 text-primary" />
@@ -397,7 +397,7 @@ const MainContent = () => {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid md:grid-cols-2 gap-4">
+            <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">
               <Input placeholder="Your Name" required className="bg-secondary/30 border-border/50" />
               <Input type="email" placeholder="Your Email" required className="bg-secondary/30 border-border/50" />
             </div>
