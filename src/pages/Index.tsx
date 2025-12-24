@@ -39,10 +39,10 @@ const Index = () => {
           </div>
         )}
 
-        <div className="container mx-auto px-4 py-8 lg:py-16">
-          <div className="flex flex-col lg:flex-row gap-8">
+        <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 lg:py-16">
+          <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
             {/* Left Sidebar - Profile Card */}
-            <aside className="lg:w-80 lg:flex-shrink-0">
+            <aside className="w-full lg:w-72 xl:w-80 lg:flex-shrink-0">
               <div className="lg:sticky lg:top-8">
                 <ProfileCard />
               </div>
