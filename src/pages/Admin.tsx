@@ -7,11 +7,15 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/hooks/useAuth';
-import { usePersonalInfo, useProjects, useExperiences, useSkills, useSocialLinks } from '@/hooks/useCMSData';
+import { usePersonalInfo, useProjects, useExperiences, useSkills, useSocialLinks, Project, Experience, Skill, SocialLink } from '@/hooks/useCMSData';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import { Loader2, Plus, Trash2, Save, LogOut, Home, Shield } from 'lucide-react';
+import { Loader2, Plus, Trash2, Save, LogOut, Home, Shield, Pencil, Link2 } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
+import ProjectForm from '@/components/admin/ProjectForm';
+import ExperienceForm from '@/components/admin/ExperienceForm';
+import SkillForm from '@/components/admin/SkillForm';
+import SocialLinkForm from '@/components/admin/SocialLinkForm';
 
 const Admin = () => {
   const { user, isAdmin, loading, signOut } = useAuth();
@@ -25,6 +29,16 @@ const Admin = () => {
   const { data: socialLinks, isLoading: loadingSocial } = useSocialLinks();
 
   const [saving, setSaving] = useState(false);
+
+  // Modal states
+  const [editingProject, setEditingProject] = useState<Project | null>(null);
+  const [showProjectForm, setShowProjectForm] = useState(false);
+  const [editingExperience, setEditingExperience] = useState<Experience | null>(null);
+  const [showExperienceForm, setShowExperienceForm] = useState(false);
+  const [editingSkill, setEditingSkill] = useState<Skill | null>(null);
+  const [showSkillForm, setShowSkillForm] = useState(false);
+  const [editingSocialLink, setEditingSocialLink] = useState<SocialLink | null>(null);
+  const [showSocialLinkForm, setShowSocialLinkForm] = useState(false);
 
   // Form states
   const [infoForm, setInfoForm] = useState({
@@ -137,6 +151,16 @@ const Admin = () => {
     }
   };
 
+  const handleDeleteSocialLink = async (id: string) => {
+    const { error } = await supabase.from('social_links').delete().eq('id', id);
+    if (error) {
+      toast.error('Failed to delete social link');
+    } else {
+      toast.success('Social link deleted');
+      queryClient.invalidateQueries({ queryKey: ['social-links'] });
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -178,7 +202,7 @@ const Admin = () => {
       {/* Header */}
       <header className="border-b border-border/50 bg-card/50 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <h1 className="text-xl font-display font-bold">Admin Panel</h1>
+          <h1 className="text-xl font-display font-bold">CMS Admin Panel</h1>
           <div className="flex items-center gap-3">
             <Button variant="outline" size="sm" onClick={() => navigate('/')}>
               <Home className="w-4 h-4 mr-2" />
@@ -195,11 +219,12 @@ const Admin = () => {
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
         <Tabs defaultValue="personal" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:inline-grid">
+          <TabsList className="grid w-full grid-cols-5 lg:w-auto lg:inline-grid">
             <TabsTrigger value="personal">Personal Info</TabsTrigger>
             <TabsTrigger value="projects">Projects</TabsTrigger>
             <TabsTrigger value="experience">Experience</TabsTrigger>
             <TabsTrigger value="skills">Skills</TabsTrigger>
+            <TabsTrigger value="social">Social Links</TabsTrigger>
           </TabsList>
 
           {/* Personal Info Tab */}
@@ -326,116 +351,268 @@ const Admin = () => {
 
           {/* Projects Tab */}
           <TabsContent value="projects" className="space-y-6">
-            <div className="glass-card rounded-xl p-6 space-y-4">
-              <div className="flex items-center justify-between">
-                <h2 className="text-lg font-semibold">Projects</h2>
-              </div>
+            {(showProjectForm || editingProject) ? (
+              <ProjectForm 
+                project={editingProject} 
+                onClose={() => {
+                  setShowProjectForm(false);
+                  setEditingProject(null);
+                }}
+              />
+            ) : (
+              <div className="glass-card rounded-xl p-6 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-lg font-semibold">Projects ({projects?.length || 0})</h2>
+                  <Button onClick={() => setShowProjectForm(true)}>
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add Project
+                  </Button>
+                </div>
 
-              {loadingProjects ? (
-                <div className="space-y-4">
-                  {[1, 2, 3].map((i) => (
-                    <Skeleton key={i} className="h-20 w-full" />
-                  ))}
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  {projects?.map((project) => (
-                    <div key={project.id} className="flex items-center gap-4 p-4 bg-secondary/30 rounded-lg">
-                      <img
-                        src={project.thumbnail || '/placeholder.svg'}
-                        alt={project.title}
-                        className="w-16 h-16 rounded object-cover"
-                      />
-                      <div className="flex-1">
-                        <h3 className="font-medium">{project.title}</h3>
-                        <p className="text-sm text-muted-foreground line-clamp-1">{project.description}</p>
+                {loadingProjects ? (
+                  <div className="space-y-4">
+                    {[1, 2, 3].map((i) => (
+                      <Skeleton key={i} className="h-20 w-full" />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {projects?.map((project) => (
+                      <div key={project.id} className="flex items-center gap-4 p-4 bg-secondary/30 rounded-lg">
+                        <img
+                          src={project.thumbnail || '/placeholder.svg'}
+                          alt={project.title}
+                          className="w-16 h-16 rounded object-cover"
+                        />
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2">
+                            <h3 className="font-medium">{project.title}</h3>
+                            {project.featured && (
+                              <span className="text-xs px-2 py-0.5 rounded bg-primary/20 text-primary">Featured</span>
+                            )}
+                            {project.coming_soon && (
+                              <span className="text-xs px-2 py-0.5 rounded bg-accent/20 text-accent">Coming Soon</span>
+                            )}
+                          </div>
+                          <p className="text-sm text-muted-foreground line-clamp-1">{project.description}</p>
+                        </div>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          onClick={() => setEditingProject(project)}
+                        >
+                          <Pencil className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          variant="destructive"
+                          size="icon"
+                          onClick={() => handleDeleteProject(project.id)}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
                       </div>
-                      <Button
-                        variant="destructive"
-                        size="icon"
-                        onClick={() => handleDeleteProject(project.id)}
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+                    ))}
+                    {projects?.length === 0 && (
+                      <p className="text-center text-muted-foreground py-8">No projects yet. Add your first project!</p>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
           </TabsContent>
 
           {/* Experience Tab */}
           <TabsContent value="experience" className="space-y-6">
-            <div className="glass-card rounded-xl p-6 space-y-4">
-              <div className="flex items-center justify-between">
-                <h2 className="text-lg font-semibold">Experience & Education</h2>
-              </div>
+            {(showExperienceForm || editingExperience) ? (
+              <ExperienceForm 
+                experience={editingExperience} 
+                onClose={() => {
+                  setShowExperienceForm(false);
+                  setEditingExperience(null);
+                }}
+              />
+            ) : (
+              <div className="glass-card rounded-xl p-6 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-lg font-semibold">Experience & Education ({experiences?.length || 0})</h2>
+                  <Button onClick={() => setShowExperienceForm(true)}>
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add Experience
+                  </Button>
+                </div>
 
-              {loadingExperiences ? (
-                <div className="space-y-4">
-                  {[1, 2, 3].map((i) => (
-                    <Skeleton key={i} className="h-20 w-full" />
-                  ))}
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  {experiences?.map((exp) => (
-                    <div key={exp.id} className="flex items-center gap-4 p-4 bg-secondary/30 rounded-lg">
-                      <div className="flex-1">
-                        <h3 className="font-medium">{exp.role}</h3>
-                        <p className="text-sm text-muted-foreground">{exp.company} • {exp.period}</p>
+                {loadingExperiences ? (
+                  <div className="space-y-4">
+                    {[1, 2, 3].map((i) => (
+                      <Skeleton key={i} className="h-20 w-full" />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {experiences?.map((exp) => (
+                      <div key={exp.id} className="flex items-center gap-4 p-4 bg-secondary/30 rounded-lg">
+                        <div className="flex-1">
+                          <h3 className="font-medium">{exp.role}</h3>
+                          <p className="text-sm text-muted-foreground">{exp.company} • {exp.period}</p>
+                        </div>
+                        <span className="text-xs px-2 py-1 rounded bg-secondary text-muted-foreground">
+                          {exp.type}
+                        </span>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          onClick={() => setEditingExperience(exp)}
+                        >
+                          <Pencil className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          variant="destructive"
+                          size="icon"
+                          onClick={() => handleDeleteExperience(exp.id)}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
                       </div>
-                      <span className="text-xs px-2 py-1 rounded bg-secondary text-muted-foreground">
-                        {exp.type}
-                      </span>
-                      <Button
-                        variant="destructive"
-                        size="icon"
-                        onClick={() => handleDeleteExperience(exp.id)}
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+                    ))}
+                    {experiences?.length === 0 && (
+                      <p className="text-center text-muted-foreground py-8">No experience yet. Add your first experience!</p>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
           </TabsContent>
 
           {/* Skills Tab */}
           <TabsContent value="skills" className="space-y-6">
-            <div className="glass-card rounded-xl p-6 space-y-4">
-              <div className="flex items-center justify-between">
-                <h2 className="text-lg font-semibold">Skills & Tools</h2>
-              </div>
+            {(showSkillForm || editingSkill) ? (
+              <SkillForm 
+                skill={editingSkill} 
+                onClose={() => {
+                  setShowSkillForm(false);
+                  setEditingSkill(null);
+                }}
+              />
+            ) : (
+              <div className="glass-card rounded-xl p-6 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-lg font-semibold">Skills & Tools ({skills?.length || 0})</h2>
+                  <Button onClick={() => setShowSkillForm(true)}>
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add Skill
+                  </Button>
+                </div>
 
-              {loadingSkills ? (
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-                    <Skeleton key={i} className="h-16 w-full" />
-                  ))}
-                </div>
-              ) : (
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {skills?.map((skill) => (
-                    <div key={skill.id} className="flex items-center justify-between p-3 bg-secondary/30 rounded-lg">
-                      <div>
-                        <p className="font-medium text-sm">{skill.name}</p>
-                        <p className="text-xs text-muted-foreground">{skill.category}</p>
+                {loadingSkills ? (
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+                      <Skeleton key={i} className="h-16 w-full" />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {skills?.map((skill) => (
+                      <div key={skill.id} className="flex items-center justify-between p-3 bg-secondary/30 rounded-lg">
+                        <div>
+                          <p className="font-medium text-sm">{skill.name}</p>
+                          <p className="text-xs text-muted-foreground">{skill.category}</p>
+                        </div>
+                        <div className="flex gap-1">
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            className="h-8 w-8"
+                            onClick={() => setEditingSkill(skill)}
+                          >
+                            <Pencil className="w-3 h-3" />
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            size="icon"
+                            className="h-8 w-8"
+                            onClick={() => handleDeleteSkill(skill.id)}
+                          >
+                            <Trash2 className="w-3 h-3" />
+                          </Button>
+                        </div>
                       </div>
-                      <Button
-                        variant="destructive"
-                        size="icon"
-                        className="h-8 w-8"
-                        onClick={() => handleDeleteSkill(skill.id)}
-                      >
-                        <Trash2 className="w-3 h-3" />
-                      </Button>
-                    </div>
-                  ))}
+                    ))}
+                    {skills?.length === 0 && (
+                      <p className="text-center text-muted-foreground py-8 col-span-full">No skills yet. Add your first skill!</p>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+          </TabsContent>
+
+          {/* Social Links Tab */}
+          <TabsContent value="social" className="space-y-6">
+            {(showSocialLinkForm || editingSocialLink) ? (
+              <SocialLinkForm 
+                socialLink={editingSocialLink} 
+                onClose={() => {
+                  setShowSocialLinkForm(false);
+                  setEditingSocialLink(null);
+                }}
+              />
+            ) : (
+              <div className="glass-card rounded-xl p-6 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-lg font-semibold">Social Links ({socialLinks?.length || 0})</h2>
+                  <Button onClick={() => setShowSocialLinkForm(true)}>
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add Social Link
+                  </Button>
                 </div>
-              )}
-            </div>
+
+                {loadingSocial ? (
+                  <div className="space-y-4">
+                    {[1, 2, 3].map((i) => (
+                      <Skeleton key={i} className="h-16 w-full" />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {socialLinks?.map((link) => (
+                      <div key={link.id} className="flex items-center gap-4 p-4 bg-secondary/30 rounded-lg">
+                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                          <Link2 className="w-5 h-5 text-primary" />
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="font-medium">{link.platform}</h3>
+                          <a 
+                            href={link.url} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="text-sm text-muted-foreground hover:text-primary truncate block max-w-md"
+                          >
+                            {link.url}
+                          </a>
+                        </div>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          onClick={() => setEditingSocialLink(link)}
+                        >
+                          <Pencil className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          variant="destructive"
+                          size="icon"
+                          onClick={() => handleDeleteSocialLink(link.id)}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    ))}
+                    {socialLinks?.length === 0 && (
+                      <p className="text-center text-muted-foreground py-8">No social links yet. Add your first link!</p>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
           </TabsContent>
         </Tabs>
       </main>

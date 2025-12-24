@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
-import { Briefcase, GraduationCap, ArrowUpRight, Phone, Mail as MailIcon, MapPin } from 'lucide-react';
+import { Briefcase, GraduationCap, ArrowUpRight, Phone, Mail as MailIcon, MapPin, ChevronDown } from 'lucide-react';
 import * as LucideIcons from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,6 +8,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { usePersonalInfo, useProjects, useExperiences, useSkills } from '@/hooks/useCMSData';
 import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from 'sonner';
+
+const INITIAL_PROJECTS_SHOWN = 4;
 
 const TypewriterText = ({ texts }: { texts: string[] }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -56,6 +58,7 @@ const MainContent = () => {
   const { data: projects, isLoading: loadingProjects } = useProjects();
   const { data: experiences, isLoading: loadingExperiences } = useExperiences();
   const { data: skills, isLoading: loadingSkills } = useSkills();
+  const [projectsToShow, setProjectsToShow] = useState(INITIAL_PROJECTS_SHOWN);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -205,41 +208,57 @@ const MainContent = () => {
             ))}
           </div>
         ) : (
-          <div className="grid md:grid-cols-2 gap-4">
-            {projects?.filter(p => !p.coming_soon).map((project) => (
-              <motion.a
-                key={project.id}
-                href={project.github_url || '#'}
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ scale: 1.02 }}
-                className="glass-card rounded-xl overflow-hidden group cursor-pointer"
-              >
-                <div className="relative aspect-video overflow-hidden">
-                  <img
-                    src={project.thumbnail || '/placeholder.svg'}
-                    alt={project.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
-                </div>
-                <div className="p-4 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-semibold text-foreground">{project.title}</h3>
-                    <ArrowUpRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+          <>
+            <div className="grid md:grid-cols-2 gap-4">
+              {projects?.filter(p => !p.coming_soon).slice(0, projectsToShow).map((project) => (
+                <motion.a
+                  key={project.id}
+                  href={project.live_url || project.github_url || '#'}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.02 }}
+                  className="glass-card rounded-xl overflow-hidden group cursor-pointer"
+                >
+                  <div className="relative aspect-video overflow-hidden">
+                    <img
+                      src={project.thumbnail || '/placeholder.svg'}
+                      alt={project.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
                   </div>
-                  <p className="text-sm text-muted-foreground line-clamp-2">{project.description}</p>
-                  <div className="flex flex-wrap gap-1">
-                    {project.tech_stack?.slice(0, 3).map((tech) => (
-                      <span key={tech} className="text-xs px-2 py-1 rounded bg-secondary/50 text-muted-foreground">
-                        {tech}
-                      </span>
-                    ))}
+                  <div className="p-4 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <h3 className="font-semibold text-foreground">{project.title}</h3>
+                      <ArrowUpRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                    </div>
+                    <p className="text-sm text-muted-foreground line-clamp-2">{project.description}</p>
+                    <div className="flex flex-wrap gap-1">
+                      {project.tech_stack?.slice(0, 3).map((tech) => (
+                        <span key={tech} className="text-xs px-2 py-1 rounded bg-secondary/50 text-muted-foreground">
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              </motion.a>
-            ))}
-          </div>
+                </motion.a>
+              ))}
+            </div>
+            
+            {/* Load More Button */}
+            {projects && projects.filter(p => !p.coming_soon).length > projectsToShow && (
+              <div className="flex justify-center pt-4">
+                <Button
+                  variant="outline"
+                  onClick={() => setProjectsToShow(prev => prev + 4)}
+                  className="border-border/50 hover:bg-secondary/50"
+                >
+                  <ChevronDown className="w-4 h-4 mr-2" />
+                  Load More Projects
+                </Button>
+              </div>
+            )}
+          </>
         )}
       </motion.section>
 
