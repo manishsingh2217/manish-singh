@@ -89,97 +89,133 @@ const ProjectForm = ({ project, onClose }: ProjectFormProps) => {
   };
 
   return (
-    <div className="glass-card rounded-xl p-6 space-y-6">
+    <div className="glass-card rounded-xl p-4 sm:p-6 space-y-4 sm:space-y-6">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold">{project ? 'Edit Project' : 'New Project'}</h3>
+        <h3 className="text-base sm:text-lg font-semibold">{project ? 'Edit Project' : 'New Project'}</h3>
         <Button variant="ghost" size="icon" onClick={onClose}>
           <X className="w-4 h-4" />
         </Button>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2">
           <div className="space-y-2">
-            <Label>Title *</Label>
+            <Label className="text-sm">Title *</Label>
             <Input
               required
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value })}
               placeholder="Project title"
+              className="text-sm"
             />
           </div>
           <div className="space-y-2">
-            <Label>Display Order</Label>
+            <Label className="text-sm">Display Order</Label>
             <Input
               type="number"
               value={form.display_order}
               onChange={(e) => setForm({ ...form, display_order: parseInt(e.target.value) || 0 })}
+              className="text-sm"
             />
           </div>
-          <div className="space-y-2 md:col-span-2">
-            <Label>Description</Label>
+          <div className="space-y-2 sm:col-span-2">
+            <Label className="text-sm">Description</Label>
             <Textarea
               rows={3}
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
               placeholder="Project description"
+              className="text-sm"
             />
           </div>
-          <div className="space-y-2">
-            <Label>Thumbnail URL</Label>
+          
+          {/* Thumbnail URL with Preview */}
+          <div className="space-y-2 sm:col-span-2">
+            <Label className="text-sm">Thumbnail URL</Label>
             <Input
               value={form.thumbnail}
               onChange={(e) => setForm({ ...form, thumbnail: e.target.value })}
-              placeholder="https://..."
+              placeholder="https://i.ibb.co/... (use direct image URL)"
+              className="text-sm"
             />
+            <p className="text-xs text-muted-foreground">
+              Use a direct image URL (ending in .jpg, .png, etc). For ImgBB, right-click the image and copy the image address.
+            </p>
+            {form.thumbnail && (
+              <div className="mt-2 relative">
+                <p className="text-xs text-muted-foreground mb-1">Preview:</p>
+                <div className="w-full max-w-xs aspect-video bg-secondary/30 rounded-lg overflow-hidden">
+                  <img
+                    src={form.thumbnail}
+                    alt="Thumbnail preview"
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).style.display = 'none';
+                      (e.target as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
+                    }}
+                    onLoad={(e) => {
+                      (e.target as HTMLImageElement).style.display = 'block';
+                      (e.target as HTMLImageElement).nextElementSibling?.classList.add('hidden');
+                    }}
+                  />
+                  <div className="hidden w-full h-full flex items-center justify-center text-xs text-destructive p-2 text-center">
+                    Failed to load image. Check if URL is a direct image link.
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
+
           <div className="space-y-2">
-            <Label>Tech Stack (comma-separated)</Label>
+            <Label className="text-sm">Tech Stack (comma-separated)</Label>
             <Input
               value={form.tech_stack}
               onChange={(e) => setForm({ ...form, tech_stack: e.target.value })}
               placeholder="React, TypeScript, Tailwind"
+              className="text-sm"
             />
           </div>
           <div className="space-y-2">
-            <Label>GitHub URL</Label>
+            <Label className="text-sm">GitHub URL</Label>
             <Input
               value={form.github_url}
               onChange={(e) => setForm({ ...form, github_url: e.target.value })}
               placeholder="https://github.com/..."
+              className="text-sm"
             />
           </div>
-          <div className="space-y-2">
-            <Label>Live URL</Label>
+          <div className="space-y-2 sm:col-span-2">
+            <Label className="text-sm">Live URL</Label>
             <Input
               value={form.live_url}
               onChange={(e) => setForm({ ...form, live_url: e.target.value })}
               placeholder="https://..."
+              className="text-sm"
             />
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center gap-4 sm:col-span-2">
             <div className="flex items-center gap-2">
               <Switch
                 checked={form.featured}
                 onCheckedChange={(checked) => setForm({ ...form, featured: checked })}
               />
-              <Label>Featured</Label>
+              <Label className="text-sm">Featured</Label>
             </div>
             <div className="flex items-center gap-2">
               <Switch
                 checked={form.coming_soon}
                 onCheckedChange={(checked) => setForm({ ...form, coming_soon: checked })}
               />
-              <Label>Coming Soon</Label>
+              <Label className="text-sm">Coming Soon</Label>
             </div>
           </div>
         </div>
 
-        <div className="flex gap-3 justify-end">
-          <Button type="button" variant="outline" onClick={onClose}>
+        <div className="flex flex-col-reverse sm:flex-row gap-3 sm:justify-end pt-2">
+          <Button type="button" variant="outline" onClick={onClose} className="w-full sm:w-auto">
             Cancel
           </Button>
-          <Button type="submit" disabled={saving}>
+          <Button type="submit" disabled={saving} className="w-full sm:w-auto">
             {saving && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
             <Save className="w-4 h-4 mr-2" />
             {project ? 'Update' : 'Create'}

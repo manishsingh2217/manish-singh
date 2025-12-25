@@ -85,29 +85,30 @@ const SkillForm = ({ skill, onClose }: SkillFormProps) => {
   };
 
   return (
-    <div className="glass-card rounded-xl p-6 space-y-6">
+    <div className="glass-card rounded-xl p-4 sm:p-6 space-y-4 sm:space-y-6">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold">{skill ? 'Edit Skill' : 'New Skill'}</h3>
+        <h3 className="text-base sm:text-lg font-semibold">{skill ? 'Edit Skill' : 'New Skill'}</h3>
         <Button variant="ghost" size="icon" onClick={onClose}>
           <X className="w-4 h-4" />
         </Button>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2">
           <div className="space-y-2">
-            <Label>Name *</Label>
+            <Label className="text-sm">Name *</Label>
             <Input
               required
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
               placeholder="Python"
+              className="text-sm"
             />
           </div>
           <div className="space-y-2">
-            <Label>Category</Label>
+            <Label className="text-sm">Category</Label>
             <Select value={form.category} onValueChange={(v) => setForm({ ...form, category: v })}>
-              <SelectTrigger>
+              <SelectTrigger className="text-sm">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -118,9 +119,9 @@ const SkillForm = ({ skill, onClose }: SkillFormProps) => {
             </Select>
           </div>
           <div className="space-y-2">
-            <Label>Icon</Label>
+            <Label className="text-sm">Icon</Label>
             <Select value={form.icon} onValueChange={(v) => setForm({ ...form, icon: v })}>
-              <SelectTrigger>
+              <SelectTrigger className="text-sm">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -131,28 +132,30 @@ const SkillForm = ({ skill, onClose }: SkillFormProps) => {
             </Select>
           </div>
           <div className="space-y-2">
-            <Label>Display Order</Label>
+            <Label className="text-sm">Display Order</Label>
             <Input
               type="number"
               value={form.display_order}
               onChange={(e) => setForm({ ...form, display_order: parseInt(e.target.value) || 0 })}
+              className="text-sm"
             />
           </div>
-          <div className="space-y-2 md:col-span-2">
-            <Label>Description</Label>
+          <div className="space-y-2 sm:col-span-2">
+            <Label className="text-sm">Description</Label>
             <Input
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
               placeholder="Brief description"
+              className="text-sm"
             />
           </div>
         </div>
 
-        <div className="flex gap-3 justify-end">
-          <Button type="button" variant="outline" onClick={onClose}>
+        <div className="flex flex-col-reverse sm:flex-row gap-3 sm:justify-end pt-2">
+          <Button type="button" variant="outline" onClick={onClose} className="w-full sm:w-auto">
             Cancel
           </Button>
-          <Button type="submit" disabled={saving}>
+          <Button type="submit" disabled={saving} className="w-full sm:w-auto">
             {saving && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
             <Save className="w-4 h-4 mr-2" />
             {skill ? 'Update' : 'Create'}

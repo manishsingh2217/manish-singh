@@ -201,36 +201,36 @@ const Admin = () => {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="border-b border-border/50 bg-card/50 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <h1 className="text-xl font-display font-bold">CMS Admin Panel</h1>
-          <div className="flex items-center gap-3">
-            <Button variant="outline" size="sm" onClick={() => navigate('/')}>
-              <Home className="w-4 h-4 mr-2" />
-              View Site
+        <div className="container mx-auto px-3 sm:px-4 py-3 sm:py-4 flex items-center justify-between gap-2">
+          <h1 className="text-base sm:text-xl font-display font-bold truncate">CMS Admin</h1>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Button variant="outline" size="sm" onClick={() => navigate('/')} className="text-xs sm:text-sm px-2 sm:px-3">
+              <Home className="w-4 h-4 sm:mr-2" />
+              <span className="hidden sm:inline">View Site</span>
             </Button>
-            <Button variant="ghost" size="sm" onClick={handleSignOut}>
-              <LogOut className="w-4 h-4 mr-2" />
-              Sign Out
+            <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-xs sm:text-sm px-2 sm:px-3">
+              <LogOut className="w-4 h-4 sm:mr-2" />
+              <span className="hidden sm:inline">Sign Out</span>
             </Button>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-8">
-        <Tabs defaultValue="personal" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5 lg:w-auto lg:inline-grid">
-            <TabsTrigger value="personal">Personal Info</TabsTrigger>
-            <TabsTrigger value="projects">Projects</TabsTrigger>
-            <TabsTrigger value="experience">Experience</TabsTrigger>
-            <TabsTrigger value="skills">Skills</TabsTrigger>
-            <TabsTrigger value="social">Social Links</TabsTrigger>
+      <main className="container mx-auto px-3 sm:px-4 py-4 sm:py-8">
+        <Tabs defaultValue="personal" className="space-y-4 sm:space-y-6">
+          <TabsList className="w-full h-auto flex flex-wrap gap-1 bg-secondary/30 p-1 rounded-lg">
+            <TabsTrigger value="personal" className="flex-1 min-w-[80px] text-xs sm:text-sm py-1.5 sm:py-2">Personal</TabsTrigger>
+            <TabsTrigger value="projects" className="flex-1 min-w-[80px] text-xs sm:text-sm py-1.5 sm:py-2">Projects</TabsTrigger>
+            <TabsTrigger value="experience" className="flex-1 min-w-[80px] text-xs sm:text-sm py-1.5 sm:py-2">Experience</TabsTrigger>
+            <TabsTrigger value="skills" className="flex-1 min-w-[80px] text-xs sm:text-sm py-1.5 sm:py-2">Skills</TabsTrigger>
+            <TabsTrigger value="social" className="flex-1 min-w-[80px] text-xs sm:text-sm py-1.5 sm:py-2">Social</TabsTrigger>
           </TabsList>
 
           {/* Personal Info Tab */}
-          <TabsContent value="personal" className="space-y-6">
-            <div className="glass-card rounded-xl p-6 space-y-6">
-              <h2 className="text-lg font-semibold">Personal Information</h2>
+          <TabsContent value="personal" className="space-y-4 sm:space-y-6">
+            <div className="glass-card rounded-xl p-4 sm:p-6 space-y-4 sm:space-y-6">
+              <h2 className="text-base sm:text-lg font-semibold">Personal Information</h2>
 
               {loadingInfo ? (
                 <div className="space-y-4">
@@ -239,109 +239,122 @@ const Admin = () => {
                   ))}
                 </div>
               ) : (
-                <div className="grid gap-4 md:grid-cols-2">
+                <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2">
                   <div className="space-y-2">
-                    <Label>Name</Label>
+                    <Label className="text-sm">Name</Label>
                     <Input
                       value={infoForm.name}
                       onChange={(e) => setInfoForm({ ...infoForm, name: e.target.value })}
+                      className="text-sm"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Roles (comma-separated)</Label>
+                    <Label className="text-sm">Roles (comma-separated)</Label>
                     <Input
                       value={infoForm.roles}
                       onChange={(e) => setInfoForm({ ...infoForm, roles: e.target.value })}
                       placeholder="Data Scientist, Data Analyst, Student"
+                      className="text-sm"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Location</Label>
+                    <Label className="text-sm">Location</Label>
                     <Input
                       value={infoForm.location}
                       onChange={(e) => setInfoForm({ ...infoForm, location: e.target.value })}
+                      className="text-sm"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Email</Label>
+                    <Label className="text-sm">Email</Label>
                     <Input
                       type="email"
                       value={infoForm.email}
                       onChange={(e) => setInfoForm({ ...infoForm, email: e.target.value })}
+                      className="text-sm"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Phone</Label>
+                    <Label className="text-sm">Phone</Label>
                     <Input
                       value={infoForm.phone}
                       onChange={(e) => setInfoForm({ ...infoForm, phone: e.target.value })}
+                      className="text-sm"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Address</Label>
+                    <Label className="text-sm">Address</Label>
                     <Input
                       value={infoForm.address}
                       onChange={(e) => setInfoForm({ ...infoForm, address: e.target.value })}
+                      className="text-sm"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>CV URL</Label>
+                    <Label className="text-sm">CV URL</Label>
                     <Input
                       value={infoForm.cv_url}
                       onChange={(e) => setInfoForm({ ...infoForm, cv_url: e.target.value })}
+                      className="text-sm"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Profile Image URL</Label>
+                    <Label className="text-sm">Profile Image URL</Label>
                     <Input
                       value={infoForm.profile_image}
                       onChange={(e) => setInfoForm({ ...infoForm, profile_image: e.target.value })}
+                      className="text-sm"
                     />
                   </div>
-                  <div className="md:col-span-2 space-y-2">
-                    <Label>Bio</Label>
+                  <div className="sm:col-span-2 space-y-2">
+                    <Label className="text-sm">Bio</Label>
                     <Textarea
                       rows={4}
                       value={infoForm.bio}
                       onChange={(e) => setInfoForm({ ...infoForm, bio: e.target.value })}
+                      className="text-sm"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Projects Count</Label>
+                    <Label className="text-sm">Projects Count</Label>
                     <Input
                       type="number"
                       value={infoForm.stats_projects}
                       onChange={(e) => setInfoForm({ ...infoForm, stats_projects: parseInt(e.target.value) || 0 })}
+                      className="text-sm"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Experience</Label>
+                    <Label className="text-sm">Experience</Label>
                     <Input
                       value={infoForm.stats_experience}
                       onChange={(e) => setInfoForm({ ...infoForm, stats_experience: e.target.value })}
                       placeholder="1+"
+                      className="text-sm"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Clients Count</Label>
+                    <Label className="text-sm">Clients Count</Label>
                     <Input
                       type="number"
                       value={infoForm.stats_clients}
                       onChange={(e) => setInfoForm({ ...infoForm, stats_clients: parseInt(e.target.value) || 0 })}
+                      className="text-sm"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Awards Count</Label>
+                    <Label className="text-sm">Awards Count</Label>
                     <Input
                       type="number"
                       value={infoForm.stats_awards}
                       onChange={(e) => setInfoForm({ ...infoForm, stats_awards: parseInt(e.target.value) || 0 })}
+                      className="text-sm"
                     />
                   </div>
                 </div>
               )}
 
-              <Button onClick={handleSavePersonalInfo} disabled={saving}>
+              <Button onClick={handleSavePersonalInfo} disabled={saving} className="w-full sm:w-auto">
                 {saving && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
                 <Save className="w-4 h-4 mr-2" />
                 Save Changes
@@ -350,7 +363,7 @@ const Admin = () => {
           </TabsContent>
 
           {/* Projects Tab */}
-          <TabsContent value="projects" className="space-y-6">
+          <TabsContent value="projects" className="space-y-4 sm:space-y-6">
             {(showProjectForm || editingProject) ? (
               <ProjectForm 
                 project={editingProject} 
@@ -360,10 +373,10 @@ const Admin = () => {
                 }}
               />
             ) : (
-              <div className="glass-card rounded-xl p-6 space-y-4">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-lg font-semibold">Projects ({projects?.length || 0})</h2>
-                  <Button onClick={() => setShowProjectForm(true)}>
+              <div className="glass-card rounded-xl p-4 sm:p-6 space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <h2 className="text-base sm:text-lg font-semibold">Projects ({projects?.length || 0})</h2>
+                  <Button onClick={() => setShowProjectForm(true)} className="w-full sm:w-auto">
                     <Plus className="w-4 h-4 mr-2" />
                     Add Project
                   </Button>
@@ -376,17 +389,17 @@ const Admin = () => {
                     ))}
                   </div>
                 ) : (
-                  <div className="space-y-4">
+                  <div className="space-y-3 sm:space-y-4">
                     {projects?.map((project) => (
-                      <div key={project.id} className="flex items-center gap-4 p-4 bg-secondary/30 rounded-lg">
+                      <div key={project.id} className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-secondary/30 rounded-lg">
                         <img
                           src={project.thumbnail || '/placeholder.svg'}
                           alt={project.title}
-                          className="w-16 h-16 rounded object-cover"
+                          className="w-full sm:w-16 h-32 sm:h-16 rounded object-cover"
                         />
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2">
-                            <h3 className="font-medium">{project.title}</h3>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <h3 className="font-medium text-sm sm:text-base truncate">{project.title}</h3>
                             {project.featured && (
                               <span className="text-xs px-2 py-0.5 rounded bg-primary/20 text-primary">Featured</span>
                             )}
@@ -394,26 +407,30 @@ const Admin = () => {
                               <span className="text-xs px-2 py-0.5 rounded bg-accent/20 text-accent">Coming Soon</span>
                             )}
                           </div>
-                          <p className="text-sm text-muted-foreground line-clamp-1">{project.description}</p>
+                          <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2 sm:line-clamp-1">{project.description}</p>
                         </div>
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          onClick={() => setEditingProject(project)}
-                        >
-                          <Pencil className="w-4 h-4" />
-                        </Button>
-                        <Button
-                          variant="destructive"
-                          size="icon"
-                          onClick={() => handleDeleteProject(project.id)}
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
+                        <div className="flex gap-2 self-end sm:self-auto">
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            className="h-8 w-8 sm:h-10 sm:w-10"
+                            onClick={() => setEditingProject(project)}
+                          >
+                            <Pencil className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            size="icon"
+                            className="h-8 w-8 sm:h-10 sm:w-10"
+                            onClick={() => handleDeleteProject(project.id)}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
                       </div>
                     ))}
                     {projects?.length === 0 && (
-                      <p className="text-center text-muted-foreground py-8">No projects yet. Add your first project!</p>
+                      <p className="text-center text-muted-foreground py-8 text-sm">No projects yet. Add your first project!</p>
                     )}
                   </div>
                 )}
@@ -422,7 +439,7 @@ const Admin = () => {
           </TabsContent>
 
           {/* Experience Tab */}
-          <TabsContent value="experience" className="space-y-6">
+          <TabsContent value="experience" className="space-y-4 sm:space-y-6">
             {(showExperienceForm || editingExperience) ? (
               <ExperienceForm 
                 experience={editingExperience} 
@@ -432,10 +449,10 @@ const Admin = () => {
                 }}
               />
             ) : (
-              <div className="glass-card rounded-xl p-6 space-y-4">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-lg font-semibold">Experience & Education ({experiences?.length || 0})</h2>
-                  <Button onClick={() => setShowExperienceForm(true)}>
+              <div className="glass-card rounded-xl p-4 sm:p-6 space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <h2 className="text-base sm:text-lg font-semibold">Experience & Education ({experiences?.length || 0})</h2>
+                  <Button onClick={() => setShowExperienceForm(true)} className="w-full sm:w-auto">
                     <Plus className="w-4 h-4 mr-2" />
                     Add Experience
                   </Button>
@@ -448,34 +465,38 @@ const Admin = () => {
                     ))}
                   </div>
                 ) : (
-                  <div className="space-y-4">
+                  <div className="space-y-3 sm:space-y-4">
                     {experiences?.map((exp) => (
-                      <div key={exp.id} className="flex items-center gap-4 p-4 bg-secondary/30 rounded-lg">
-                        <div className="flex-1">
-                          <h3 className="font-medium">{exp.role}</h3>
-                          <p className="text-sm text-muted-foreground">{exp.company} • {exp.period}</p>
+                      <div key={exp.id} className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-secondary/30 rounded-lg">
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-medium text-sm sm:text-base">{exp.role}</h3>
+                          <p className="text-xs sm:text-sm text-muted-foreground">{exp.company} • {exp.period}</p>
                         </div>
-                        <span className="text-xs px-2 py-1 rounded bg-secondary text-muted-foreground">
-                          {exp.type}
-                        </span>
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          onClick={() => setEditingExperience(exp)}
-                        >
-                          <Pencil className="w-4 h-4" />
-                        </Button>
-                        <Button
-                          variant="destructive"
-                          size="icon"
-                          onClick={() => handleDeleteExperience(exp.id)}
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
+                        <div className="flex items-center gap-2 self-end sm:self-auto">
+                          <span className="text-xs px-2 py-1 rounded bg-secondary text-muted-foreground">
+                            {exp.type}
+                          </span>
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            className="h-8 w-8 sm:h-10 sm:w-10"
+                            onClick={() => setEditingExperience(exp)}
+                          >
+                            <Pencil className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            size="icon"
+                            className="h-8 w-8 sm:h-10 sm:w-10"
+                            onClick={() => handleDeleteExperience(exp.id)}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
                       </div>
                     ))}
                     {experiences?.length === 0 && (
-                      <p className="text-center text-muted-foreground py-8">No experience yet. Add your first experience!</p>
+                      <p className="text-center text-muted-foreground py-8 text-sm">No experience yet. Add your first experience!</p>
                     )}
                   </div>
                 )}
@@ -484,7 +505,7 @@ const Admin = () => {
           </TabsContent>
 
           {/* Skills Tab */}
-          <TabsContent value="skills" className="space-y-6">
+          <TabsContent value="skills" className="space-y-4 sm:space-y-6">
             {(showSkillForm || editingSkill) ? (
               <SkillForm 
                 skill={editingSkill} 
@@ -494,30 +515,30 @@ const Admin = () => {
                 }}
               />
             ) : (
-              <div className="glass-card rounded-xl p-6 space-y-4">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-lg font-semibold">Skills & Tools ({skills?.length || 0})</h2>
-                  <Button onClick={() => setShowSkillForm(true)}>
+              <div className="glass-card rounded-xl p-4 sm:p-6 space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <h2 className="text-base sm:text-lg font-semibold">Skills & Tools ({skills?.length || 0})</h2>
+                  <Button onClick={() => setShowSkillForm(true)} className="w-full sm:w-auto">
                     <Plus className="w-4 h-4 mr-2" />
                     Add Skill
                   </Button>
                 </div>
 
                 {loadingSkills ? (
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {[1, 2, 3, 4, 5, 6].map((i) => (
                       <Skeleton key={i} className="h-16 w-full" />
                     ))}
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                     {skills?.map((skill) => (
                       <div key={skill.id} className="flex items-center justify-between p-3 bg-secondary/30 rounded-lg">
-                        <div>
-                          <p className="font-medium text-sm">{skill.name}</p>
+                        <div className="min-w-0 flex-1">
+                          <p className="font-medium text-sm truncate">{skill.name}</p>
                           <p className="text-xs text-muted-foreground">{skill.category}</p>
                         </div>
-                        <div className="flex gap-1">
+                        <div className="flex gap-1 ml-2">
                           <Button
                             variant="outline"
                             size="icon"
@@ -538,7 +559,7 @@ const Admin = () => {
                       </div>
                     ))}
                     {skills?.length === 0 && (
-                      <p className="text-center text-muted-foreground py-8 col-span-full">No skills yet. Add your first skill!</p>
+                      <p className="text-center text-muted-foreground py-8 col-span-full text-sm">No skills yet. Add your first skill!</p>
                     )}
                   </div>
                 )}
@@ -547,7 +568,7 @@ const Admin = () => {
           </TabsContent>
 
           {/* Social Links Tab */}
-          <TabsContent value="social" className="space-y-6">
+          <TabsContent value="social" className="space-y-4 sm:space-y-6">
             {(showSocialLinkForm || editingSocialLink) ? (
               <SocialLinkForm 
                 socialLink={editingSocialLink} 
@@ -557,10 +578,10 @@ const Admin = () => {
                 }}
               />
             ) : (
-              <div className="glass-card rounded-xl p-6 space-y-4">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-lg font-semibold">Social Links ({socialLinks?.length || 0})</h2>
-                  <Button onClick={() => setShowSocialLinkForm(true)}>
+              <div className="glass-card rounded-xl p-4 sm:p-6 space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <h2 className="text-base sm:text-lg font-semibold">Social Links ({socialLinks?.length || 0})</h2>
+                  <Button onClick={() => setShowSocialLinkForm(true)} className="w-full sm:w-auto">
                     <Plus className="w-4 h-4 mr-2" />
                     Add Social Link
                   </Button>
@@ -573,41 +594,47 @@ const Admin = () => {
                     ))}
                   </div>
                 ) : (
-                  <div className="space-y-4">
+                  <div className="space-y-3 sm:space-y-4">
                     {socialLinks?.map((link) => (
-                      <div key={link.id} className="flex items-center gap-4 p-4 bg-secondary/30 rounded-lg">
-                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                          <Link2 className="w-5 h-5 text-primary" />
+                      <div key={link.id} className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-secondary/30 rounded-lg">
+                        <div className="flex items-center gap-3 flex-1 min-w-0">
+                          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                            <Link2 className="w-5 h-5 text-primary" />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <h3 className="font-medium text-sm sm:text-base">{link.platform}</h3>
+                            <a 
+                              href={link.url} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="text-xs sm:text-sm text-muted-foreground hover:text-primary truncate block"
+                            >
+                              {link.url}
+                            </a>
+                          </div>
                         </div>
-                        <div className="flex-1">
-                          <h3 className="font-medium">{link.platform}</h3>
-                          <a 
-                            href={link.url} 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            className="text-sm text-muted-foreground hover:text-primary truncate block max-w-md"
+                        <div className="flex gap-2 self-end sm:self-auto">
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            className="h-8 w-8 sm:h-10 sm:w-10"
+                            onClick={() => setEditingSocialLink(link)}
                           >
-                            {link.url}
-                          </a>
+                            <Pencil className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            size="icon"
+                            className="h-8 w-8 sm:h-10 sm:w-10"
+                            onClick={() => handleDeleteSocialLink(link.id)}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
                         </div>
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          onClick={() => setEditingSocialLink(link)}
-                        >
-                          <Pencil className="w-4 h-4" />
-                        </Button>
-                        <Button
-                          variant="destructive"
-                          size="icon"
-                          onClick={() => handleDeleteSocialLink(link.id)}
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
                       </div>
                     ))}
                     {socialLinks?.length === 0 && (
-                      <p className="text-center text-muted-foreground py-8">No social links yet. Add your first link!</p>
+                      <p className="text-center text-muted-foreground py-8 text-sm">No social links yet. Add your first link!</p>
                     )}
                   </div>
                 )}
