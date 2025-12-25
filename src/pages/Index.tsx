@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Settings } from 'lucide-react';
 import ProfileCard from '@/components/ProfileCard';
 import MainContent from '@/components/MainContent';
+import FloatingContactButton from '@/components/FloatingContactButton';
 import { usePersonalInfo } from '@/hooks/useCMSData';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
@@ -64,6 +65,9 @@ const Index = () => {
             </Link>
           </div>
         </footer>
+
+        {/* Floating Contact Button */}
+        <FloatingContactButton />
       </div>
     </>
   );
