@@ -38,9 +38,10 @@ const handler = async (req: Request): Promise<Response> => {
     console.log("Sending contact email from:", name, email);
 
     // Send notification email to site owner
+    // Note: Using Resend signup email until domain is verified
     const emailResponse = await resend.emails.send({
       from: "Portfolio Contact <onboarding@resend.dev>",
-      to: ["engineeringbymanish@gmail.com"],
+      to: ["manishupwala731@gmail.com"],
       subject: `New Contact Form Message from ${name}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
