@@ -66,9 +66,33 @@ const handler = async (req: Request): Promise<Response> => {
       `,
     });
 
-    console.log("Email sent successfully:", emailResponse);
+    // Check if Resend returned an error
+    if (emailResponse.error) {
+      console.error("Resend error:", emailResponse.error);
+      return new Response(
+        JSON.stringify({ error: emailResponse.error.message || "Failed to send email" }),
+        {
+          status: 500,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
 
-    return new Response(JSON.stringify({ success: true }), {
+    // Verify we got a successful response with an ID
+    if (!emailResponse.data?.id) {
+      console.error("No email ID returned:", emailResponse);
+      return new Response(
+        JSON.stringify({ error: "Email sending failed - no confirmation received" }),
+        {
+          status: 500,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
+
+    console.log("Email sent successfully with ID:", emailResponse.data.id);
+
+    return new Response(JSON.stringify({ success: true, id: emailResponse.data.id }), {
       status: 200,
       headers: { "Content-Type": "application/json", ...corsHeaders },
     });
