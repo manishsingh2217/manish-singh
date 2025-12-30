@@ -1,13 +1,11 @@
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-import { Briefcase, GraduationCap, ArrowUpRight, Phone, Mail as MailIcon, MapPin, ChevronDown } from "lucide-react";
+import { Briefcase, GraduationCap, ArrowUpRight, ChevronDown } from "lucide-react";
 import * as LucideIcons from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { usePersonalInfo, useProjects, useExperiences, useSkills } from "@/hooks/useCMSData";
 import { Skeleton } from "@/components/ui/skeleton";
-import { toast } from "sonner";
+import ContactSection from "@/components/ContactSection";
 
 const INITIAL_PROJECTS_SHOWN = 4;
 
@@ -62,11 +60,6 @@ const MainContent = () => {
   const { data: experiences, isLoading: loadingExperiences } = useExperiences();
   const { data: skills, isLoading: loadingSkills } = useSkills();
   const [projectsToShow, setProjectsToShow] = useState(INITIAL_PROJECTS_SHOWN);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    toast.success("Message sent successfully! I will get back to you soon.");
-  };
 
   const workExperiences = experiences?.filter((exp) => exp.type === "work") || [];
   const education = experiences?.filter((exp) => exp.type === "education") || [];
@@ -348,69 +341,8 @@ const MainContent = () => {
         )}
       </motion.section>
 
-      {/* Contact Section */}
-      <motion.section
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.6 }}
-        id="contact"
-        className="space-y-6"
-      >
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-secondary/50 flex items-center justify-center">
-            <MailIcon className="w-5 h-5 text-primary" />
-          </div>
-          <h2 className="text-xl font-display font-semibold">Contact</h2>
-        </div>
-
-        <div className="glass-card rounded-xl p-6 space-y-6">
-          <h3 className="text-2xl font-display font-bold text-center">Let's Get in Touch!</h3>
-
-          {personalInfo && (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-              <div className="flex items-center gap-3 p-4 rounded-lg bg-secondary/30">
-                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                  <Phone className="w-5 h-5 text-primary" />
-                </div>
-                <div>
-                  <p className="text-xs text-muted-foreground">Contact No</p>
-                  <p className="text-sm font-medium text-foreground">{personalInfo.phone}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 p-4 rounded-lg bg-secondary/30">
-                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                  <MailIcon className="w-5 h-5 text-primary" />
-                </div>
-                <div>
-                  <p className="text-xs text-muted-foreground">Email</p>
-                  <p className="text-sm font-medium text-foreground">{personalInfo.email}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 p-4 rounded-lg bg-secondary/30">
-                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                  <MapPin className="w-5 h-5 text-primary" />
-                </div>
-                <div>
-                  <p className="text-xs text-muted-foreground">Address</p>
-                  <p className="text-sm font-medium text-foreground">{personalInfo.address}</p>
-                </div>
-              </div>
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">
-              <Input placeholder="Your Name" required className="bg-secondary/30 border-border/50" />
-              <Input type="email" placeholder="Your Email" required className="bg-secondary/30 border-border/50" />
-            </div>
-            <Input placeholder="Subject" required className="bg-secondary/30 border-border/50" />
-            <Textarea placeholder="Your Message" rows={4} required className="bg-secondary/30 border-border/50" />
-            <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
-              Send Message
-            </Button>
-          </form>
-        </div>
-      </motion.section>
+      {/* Contact Section - Using the real ContactSection component */}
+      <ContactSection />
     </div>
   );
 };
