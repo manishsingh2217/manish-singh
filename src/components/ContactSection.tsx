@@ -5,20 +5,13 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
-import { usePersonalInfo, useSocialLinks } from '@/hooks/useCMSData';
-import { 
-  Mail, Phone, MapPin, Send, Linkedin, Github, Instagram, Youtube, Facebook 
-} from 'lucide-react';
-
-const socialIconMap: Record<string, React.ElementType> = {
-  Linkedin, Github, Instagram, Youtube, Facebook
-};
+import { usePersonalInfo } from '@/hooks/useCMSData';
+import { Mail, Phone, MapPin, Send } from 'lucide-react';
 
 const ContactSection = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const { data: personalInfo } = usePersonalInfo();
-  const { data: socialLinks } = useSocialLinks();
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -117,25 +110,6 @@ const ContactSection = () => {
           </div>
         )}
 
-        {/* Social Links */}
-        {socialLinks && socialLinks.length > 0 && (
-          <div className="flex justify-center gap-3">
-            {socialLinks.map((social) => {
-              const IconComponent = socialIconMap[social.icon] || Linkedin;
-              return (
-                <a
-                  key={social.id}
-                  href={social.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-full bg-secondary/30 flex items-center justify-center hover:bg-primary/10 transition-all group"
-                >
-                  <IconComponent className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
-                </a>
-              );
-            })}
-          </div>
-        )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">
