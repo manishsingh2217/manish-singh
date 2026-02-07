@@ -4,13 +4,20 @@ import { useTheme } from '@/hooks/useTheme';
 import { Button } from '@/components/ui/button';
 import { Menu, X, Sun, Moon } from 'lucide-react';
 
-const navItems = [
+interface NavItem {
+  label: string;
+  href: string;
+  isExternal?: boolean;
+}
+
+const navItems: NavItem[] = [
   { label: 'About', href: '#about' },
   { label: 'Skills', href: '#skills' },
   { label: 'Projects', href: '#projects' },
   { label: 'Experience', href: '#experience' },
   { label: 'Services', href: '#services' },
   { label: 'Contact', href: '#contact' },
+  { label: 'Resources', href: '/resources', isExternal: true },
 ];
 
 const Navbar = () => {
@@ -26,10 +33,14 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleNavClick = (href: string) => {
+  const handleNavClick = (item: NavItem) => {
     setIsMobileMenuOpen(false);
-    const element = document.querySelector(href);
-    element?.scrollIntoView({ behavior: 'smooth' });
+    if (item.isExternal) {
+      window.open(item.href, '_blank');
+    } else {
+      const element = document.querySelector(item.href);
+      element?.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   return (
@@ -63,7 +74,7 @@ const Navbar = () => {
               {navItems.map((item) => (
                 <button
                   key={item.label}
-                  onClick={() => handleNavClick(item.href)}
+                  onClick={() => handleNavClick(item)}
                   className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors relative group"
                 >
                   {item.label}
@@ -141,7 +152,7 @@ const Navbar = () => {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.05 }}
-                    onClick={() => handleNavClick(item.href)}
+                    onClick={() => handleNavClick(item)}
                     className="block w-full text-left text-lg font-medium py-3 px-4 rounded-xl hover:bg-muted transition-colors"
                   >
                     {item.label}
