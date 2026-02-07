@@ -60,9 +60,6 @@ const Index = () => {
         <footer className="border-t border-border/50 py-8 mt-16">
           <div className="container mx-auto px-4 text-center text-muted-foreground">
             <p>© {new Date().getFullYear()} {personalInfo?.name || 'Manish Singh'}. All rights reserved.</p>
-            <Link to="/auth" className="text-primary hover:underline text-sm mt-2 inline-block">
-              Admin Login
-            </Link>
           </div>
         </footer>
 
