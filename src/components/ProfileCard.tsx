@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Download, Mail, Instagram, Linkedin, Github, Youtube, Facebook, BookOpen } from 'lucide-react';
+import { Download, Mail, Instagram, Linkedin, Github, Youtube, Facebook } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { usePersonalInfo, useSocialLinks } from '@/hooks/useCMSData';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -88,48 +88,30 @@ const ProfileCard = () => {
       )}
 
       {/* CTA Buttons */}
-      <div className="space-y-2">
-        <div className="grid grid-cols-2 gap-2 w-full overflow-hidden">
-          <Button
-            variant="outline"
-            size="sm"
-            className="w-full border-border/50 hover:bg-secondary/50 px-2 py-2 text-[10px] lg:text-xs"
-            asChild
-          >
-            <a
-              href={personalInfo.cv_url || '#'}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center gap-1"
-            >
-              <Download className="w-3 h-3 lg:w-4 lg:h-4 shrink-0" />
-              <span className="truncate">Download CV</span>
-            </a>
-          </Button>
-          <Button
-            size="sm"
-            className="w-full bg-primary hover:bg-primary/90 text-primary-foreground px-2 py-2 text-[10px] lg:text-xs"
-            onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-          >
-            <Mail className="w-3 h-3 lg:w-4 lg:h-4 shrink-0" />
-            <span className="truncate">Contact Me</span>
-          </Button>
-        </div>
+      <div className="grid grid-cols-2 gap-2 w-full overflow-hidden">
         <Button
-          variant="secondary"
+          variant="outline"
           size="sm"
-          className="w-full px-2 py-2 text-[10px] lg:text-xs"
+          className="w-full border-border/50 hover:bg-secondary/50 px-2 py-2 text-[10px] lg:text-xs"
           asChild
         >
           <a
-            href="/resources"
+            href={personalInfo.cv_url || '#'}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center gap-1"
           >
-            <BookOpen className="w-3 h-3 lg:w-4 lg:h-4 shrink-0" />
-            <span className="truncate">Resources</span>
+            <Download className="w-3 h-3 lg:w-4 lg:h-4 shrink-0" />
+            <span className="truncate">Download CV</span>
           </a>
+        </Button>
+        <Button
+          size="sm"
+          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground px-2 py-2 text-[10px] lg:text-xs"
+          onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+        >
+          <Mail className="w-3 h-3 lg:w-4 lg:h-4 shrink-0" />
+          <span className="truncate">Contact Me</span>
         </Button>
       </div>
     </motion.div>
