@@ -4,6 +4,7 @@ import { Settings } from 'lucide-react';
 import ProfileCard from '@/components/ProfileCard';
 import MainContent from '@/components/MainContent';
 import FloatingContactButton from '@/components/FloatingContactButton';
+import Navbar from '@/components/Navbar';
 import { usePersonalInfo } from '@/hooks/useCMSData';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
@@ -28,6 +29,7 @@ const Index = () => {
       </Helmet>
 
       <div className="min-h-screen bg-background">
+        <Navbar />
         {/* Admin Link */}
         {user && isAdmin && (
           <div className="fixed top-4 right-4 z-50">
