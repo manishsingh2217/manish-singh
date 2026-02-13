@@ -15,9 +15,11 @@ const navItems: NavItem[] = [
   { label: 'Skills', href: '#skills' },
   { label: 'Projects', href: '#projects' },
   { label: 'Experience', href: '#experience' },
+  { label: 'Education', href: '#education' },
   { label: 'Services', href: '#services' },
   { label: 'Contact', href: '#contact' },
   { label: 'Resources', href: '/resources', isExternal: true },
+  { label: 'Admin', href: '/auth', isExternal: true },
 ];
 
 const Navbar = () => {
