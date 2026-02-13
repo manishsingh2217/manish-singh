@@ -33,6 +33,12 @@ const Footer = () => {
             <p className="text-sm text-muted-foreground flex items-center justify-center md:justify-start gap-1">
               Made with <Heart className="w-4 h-4 text-red-500 fill-red-500" /> © {new Date().getFullYear()}
             </p>
+            <a
+              href="/auth"
+              className="text-xs text-muted-foreground/50 hover:text-muted-foreground transition-colors mt-1 inline-block"
+            >
+              Admin
+            </a>
           </div>
 
           {/* Social Links */}
