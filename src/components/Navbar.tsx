@@ -49,7 +49,7 @@ const Navbar = () => {
   const handleNavClick = (item: NavItem) => {
     setIsMobileMenuOpen(false);
     if (item.isExternal) {
-      window.open(item.href, '_blank');
+      window.location.href = item.href;
     } else {
       const element = document.querySelector(item.href);
       element?.scrollIntoView({ behavior: 'smooth' });
@@ -113,7 +113,7 @@ const Navbar = () => {
               })}
 
               <motion.button
-                onClick={() => window.open('/auth', '_blank')}
+                onClick={() => (window.location.href = '/auth')}
                 whileHover={{ y: -1 }}
                 whileTap={{ scale: 0.97 }}
                 className="px-2 py-1.5 text-muted-foreground/50 hover:text-muted-foreground transition-colors rounded-lg"
@@ -208,7 +208,7 @@ const Navbar = () => {
                   transition={{ delay: navItems.length * 0.03 }}
                   onClick={() => {
                     setIsMobileMenuOpen(false);
-                    window.open('/auth', '_blank');
+                    window.location.href = '/auth';
                   }}
                   className="flex items-center gap-2 w-full text-left text-xs font-medium py-2.5 px-3 rounded-lg text-muted-foreground/50 hover:text-muted-foreground hover:bg-muted/20 transition-all"
                 >
