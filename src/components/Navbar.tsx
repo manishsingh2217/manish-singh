@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '@/hooks/useTheme';
 import { Button } from '@/components/ui/button';
@@ -24,6 +25,7 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('');
   const { theme, toggleTheme } = useTheme();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -49,7 +51,7 @@ const Navbar = () => {
   const handleNavClick = (item: NavItem) => {
     setIsMobileMenuOpen(false);
     if (item.isExternal) {
-      window.location.href = item.href;
+      navigate(item.href);
     } else {
       const element = document.querySelector(item.href);
       element?.scrollIntoView({ behavior: 'smooth' });
@@ -113,7 +115,7 @@ const Navbar = () => {
               })}
 
               <motion.button
-                onClick={() => (window.location.href = '/auth')}
+                onClick={() => navigate('/auth')}
                 whileHover={{ y: -1 }}
                 whileTap={{ scale: 0.97 }}
                 className="px-2 py-1.5 text-muted-foreground/50 hover:text-muted-foreground transition-colors rounded-lg"
@@ -208,7 +210,7 @@ const Navbar = () => {
                   transition={{ delay: navItems.length * 0.03 }}
                   onClick={() => {
                     setIsMobileMenuOpen(false);
-                    window.location.href = '/auth';
+                    navigate('/auth');
                   }}
                   className="flex items-center gap-2 w-full text-left text-xs font-medium py-2.5 px-3 rounded-lg text-muted-foreground/50 hover:text-muted-foreground hover:bg-muted/20 transition-all"
                 >
