@@ -35,7 +35,7 @@ const Footer = () => {
             </p>
             <a
               href="/auth"
-              className="text-xs text-muted-foreground/50 hover:text-muted-foreground transition-colors mt-1 inline-block"
+              className="text-xs text-muted-foreground hover:text-primary transition-colors mt-1 inline-block"
             >
               Admin
             </a>
