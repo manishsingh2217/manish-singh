@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
@@ -8,10 +8,12 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/hooks/useAuth';
 import { usePersonalInfo, useProjects, useExperiences, useSkills, useSocialLinks, Project, Experience, Skill, SocialLink } from '@/hooks/useCMSData';
+import { useResources, useUploadResource, useDeleteResource, Resource } from '@/hooks/useResources';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import { Loader2, Plus, Trash2, Save, LogOut, Home, Shield, Pencil, Link2 } from 'lucide-react';
+import { Loader2, Plus, Trash2, Save, LogOut, Home, Shield, Pencil, Link2, Upload, FileText, X, Download } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import ProjectForm from '@/components/admin/ProjectForm';
 import ExperienceForm from '@/components/admin/ExperienceForm';
 import SkillForm from '@/components/admin/SkillForm';
@@ -27,6 +29,9 @@ const Admin = () => {
   const { data: experiences, isLoading: loadingExperiences } = useExperiences();
   const { data: skills, isLoading: loadingSkills } = useSkills();
   const { data: socialLinks, isLoading: loadingSocial } = useSocialLinks();
+  const { data: resources, isLoading: loadingResources } = useResources();
+  const uploadResource = useUploadResource();
+  const deleteResourceMutation = useDeleteResource();
 
   const [saving, setSaving] = useState(false);
 
@@ -39,6 +44,14 @@ const Admin = () => {
   const [showSkillForm, setShowSkillForm] = useState(false);
   const [editingSocialLink, setEditingSocialLink] = useState<SocialLink | null>(null);
   const [showSocialLinkForm, setShowSocialLinkForm] = useState(false);
+
+  // Resource upload states
+  const [showResourceUpload, setShowResourceUpload] = useState(false);
+  const [resourceTitle, setResourceTitle] = useState('');
+  const [resourceDescription, setResourceDescription] = useState('');
+  const [resourceCategory, setResourceCategory] = useState<'study_material' | 'project'>('study_material');
+  const [resourceFile, setResourceFile] = useState<File | null>(null);
+  const resourceFileRef = useRef<HTMLInputElement>(null);
 
   // Form states
   const [infoForm, setInfoForm] = useState({
@@ -86,6 +99,42 @@ const Admin = () => {
   const handleSignOut = async () => {
     await signOut();
     navigate('/');
+  };
+
+  const handleUploadResource = async () => {
+    if (!resourceFile || !resourceTitle.trim()) {
+      toast.error('Please provide a title and select a file');
+      return;
+    }
+    if (resourceFile.size > 50 * 1024 * 1024) {
+      toast.error('File size must be less than 50MB');
+      return;
+    }
+    try {
+      await uploadResource.mutateAsync({
+        file: resourceFile,
+        title: resourceTitle.trim(),
+        description: resourceDescription.trim() || undefined,
+        category: resourceCategory,
+      });
+      toast.success('Resource uploaded successfully!');
+      setShowResourceUpload(false);
+      setResourceTitle('');
+      setResourceDescription('');
+      setResourceFile(null);
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to upload resource');
+    }
+  };
+
+  const handleDeleteResource = async (resource: Resource) => {
+    if (!confirm(`Delete "${resource.title}"?`)) return;
+    try {
+      await deleteResourceMutation.mutateAsync(resource);
+      toast.success('Resource deleted');
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to delete resource');
+    }
   };
 
   const handleSavePersonalInfo = async () => {
@@ -225,6 +274,7 @@ const Admin = () => {
             <TabsTrigger value="experience" className="flex-1 min-w-[80px] text-xs sm:text-sm py-1.5 sm:py-2">Experience</TabsTrigger>
             <TabsTrigger value="skills" className="flex-1 min-w-[80px] text-xs sm:text-sm py-1.5 sm:py-2">Skills</TabsTrigger>
             <TabsTrigger value="social" className="flex-1 min-w-[80px] text-xs sm:text-sm py-1.5 sm:py-2">Social</TabsTrigger>
+            <TabsTrigger value="resources" className="flex-1 min-w-[80px] text-xs sm:text-sm py-1.5 sm:py-2">Resources</TabsTrigger>
           </TabsList>
 
           {/* Personal Info Tab */}
@@ -635,6 +685,119 @@ const Admin = () => {
                     ))}
                     {socialLinks?.length === 0 && (
                       <p className="text-center text-muted-foreground py-8 text-sm">No social links yet. Add your first link!</p>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+          </TabsContent>
+
+          {/* Resources Tab */}
+          <TabsContent value="resources" className="space-y-4 sm:space-y-6">
+            {showResourceUpload ? (
+              <div className="glass-card rounded-xl p-4 sm:p-6 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-base sm:text-lg font-semibold">Upload Resource</h2>
+                  <Button variant="ghost" size="icon" onClick={() => { setShowResourceUpload(false); setResourceFile(null); setResourceTitle(''); setResourceDescription(''); }}>
+                    <X className="w-4 h-4" />
+                  </Button>
+                </div>
+                <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label className="text-sm">Title</Label>
+                    <Input value={resourceTitle} onChange={(e) => setResourceTitle(e.target.value)} placeholder="Resource title" className="text-sm" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm">Category</Label>
+                    <Select value={resourceCategory} onValueChange={(v) => setResourceCategory(v as 'study_material' | 'project')}>
+                      <SelectTrigger className="text-sm"><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="study_material">Study Material</SelectItem>
+                        <SelectItem value="project">Project</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="sm:col-span-2 space-y-2">
+                    <Label className="text-sm">Description (optional)</Label>
+                    <Textarea value={resourceDescription} onChange={(e) => setResourceDescription(e.target.value)} placeholder="Brief description" rows={3} className="text-sm" />
+                  </div>
+                  <div className="sm:col-span-2 space-y-2">
+                    <Label className="text-sm">File</Label>
+                    <input ref={resourceFileRef} type="file" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) setResourceFile(f); }} accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt,.jpg,.jpeg,.png,.gif,.zip,.rar" />
+                    {resourceFile ? (
+                      <div className="flex items-center gap-2 p-3 rounded-lg bg-secondary/30 border">
+                        <FileText className="w-5 h-5 text-primary" />
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium truncate">{resourceFile.name}</p>
+                          <p className="text-xs text-muted-foreground">{(resourceFile.size / (1024 * 1024)).toFixed(1)} MB</p>
+                        </div>
+                        <Button type="button" variant="ghost" size="icon" className="h-8 w-8" onClick={() => setResourceFile(null)}>
+                          <X className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    ) : (
+                      <Button type="button" variant="outline" className="w-full h-20 border-dashed" onClick={() => resourceFileRef.current?.click()}>
+                        <div className="flex flex-col items-center gap-1">
+                          <Upload className="w-5 h-5 text-muted-foreground" />
+                          <span className="text-xs text-muted-foreground">Click to select a file (max 50MB)</span>
+                        </div>
+                      </Button>
+                    )}
+                  </div>
+                </div>
+                <Button onClick={handleUploadResource} disabled={uploadResource.isPending} className="w-full sm:w-auto">
+                  {uploadResource.isPending ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Upload className="w-4 h-4 mr-2" />}
+                  {uploadResource.isPending ? 'Uploading...' : 'Upload Resource'}
+                </Button>
+              </div>
+            ) : (
+              <div className="glass-card rounded-xl p-4 sm:p-6 space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <h2 className="text-base sm:text-lg font-semibold">Resources ({resources?.length || 0})</h2>
+                  <Button onClick={() => setShowResourceUpload(true)} className="w-full sm:w-auto">
+                    <Plus className="w-4 h-4 mr-2" />
+                    Upload Resource
+                  </Button>
+                </div>
+
+                {loadingResources ? (
+                  <div className="space-y-4">
+                    {[1, 2, 3].map((i) => (
+                      <Skeleton key={i} className="h-20 w-full" />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="space-y-3 sm:space-y-4">
+                    {resources?.map((resource) => (
+                      <div key={resource.id} className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-secondary/30 rounded-lg">
+                        <div className="p-2 rounded-lg bg-primary/10 shrink-0">
+                          <FileText className="w-5 h-5 text-primary" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <h3 className="font-medium text-sm sm:text-base truncate">{resource.title}</h3>
+                            <span className="text-xs px-2 py-0.5 rounded bg-primary/20 text-primary">
+                              {resource.category === 'study_material' ? 'Study Material' : 'Project'}
+                            </span>
+                          </div>
+                          <p className="text-xs sm:text-sm text-muted-foreground line-clamp-1">
+                            {resource.file_name} • {resource.file_size ? `${(resource.file_size / (1024 * 1024)).toFixed(1)} MB` : 'Unknown size'}
+                          </p>
+                        </div>
+                        <div className="flex gap-2 self-end sm:self-auto">
+                          <Button variant="outline" size="icon" className="h-8 w-8 sm:h-10 sm:w-10" asChild>
+                            <a href={resource.file_url} target="_blank" rel="noopener noreferrer" download>
+                              <Download className="w-4 h-4" />
+                            </a>
+                          </Button>
+                          <Button variant="destructive" size="icon" className="h-8 w-8 sm:h-10 sm:w-10" onClick={() => handleDeleteResource(resource)}>
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                    {resources?.length === 0 && (
+                      <p className="text-center text-muted-foreground py-8 text-sm">No resources yet. Upload your first resource!</p>
                     )}
                   </div>
                 )}
