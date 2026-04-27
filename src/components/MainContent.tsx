@@ -95,35 +95,7 @@ const MainContent = () => {
                 <span className="text-foreground">Based in {personalInfo.location}</span>
               </h1>
 
-              <p className="text-muted-foreground text-lg max-w-3xl">{personalInfo.bio}</p>
-
-              {/* Stats */}
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 pt-4">
-                <div>
-                  <div className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-foreground">
-                    {personalInfo.stats_projects}+
-                  </div>
-                  <div className="text-xs sm:text-sm text-muted-foreground">Completed Projects</div>
-                </div>
-                <div>
-                  <div className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-foreground">
-                    {personalInfo.stats_experience}
-                  </div>
-                  <div className="text-xs sm:text-sm text-muted-foreground">Years of Experience</div>
-                </div>
-                <div>
-                  <div className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-foreground">
-                    {personalInfo.stats_clients}+
-                  </div>
-                  <div className="text-xs sm:text-sm text-muted-foreground">Happy Clients</div>
-                </div>
-                <div>
-                  <div className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-foreground">
-                    {personalInfo.stats_awards}+
-                  </div>
-                  <div className="text-xs sm:text-sm text-muted-foreground">Awards Received</div>
-                </div>
-              </div>
+              <p className="text-muted-foreground text-base sm:text-lg max-w-3xl">{personalInfo.bio}</p>
             </>
           )
         )}
@@ -156,17 +128,17 @@ const MainContent = () => {
               const Icon = getIcon(exp.icon);
               return (
                 <motion.div key={exp.id} whileHover={{ scale: 1.01 }} className="glass-card rounded-xl p-6 space-y-3">
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-lg bg-secondary/50 flex items-center justify-center">
+                  <div className="flex items-start justify-between gap-3 flex-wrap">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="w-10 h-10 rounded-lg bg-secondary/50 flex items-center justify-center shrink-0">
                         <Icon className="w-5 h-5 text-primary" />
                       </div>
-                      <div>
-                        <h3 className="font-semibold text-foreground">{exp.role}</h3>
-                        <p className="text-sm text-muted-foreground">{exp.company}</p>
+                      <div className="min-w-0">
+                        <h3 className="font-semibold text-foreground break-words">{exp.role}</h3>
+                        <p className="text-sm text-muted-foreground break-words">{exp.company}</p>
                       </div>
                     </div>
-                    <span className="text-xs px-3 py-1 rounded-full bg-secondary/50 text-muted-foreground">
+                    <span className="text-xs px-3 py-1 rounded-full bg-secondary/50 text-muted-foreground whitespace-nowrap shrink-0">
                       {exp.period}
                     </span>
                   </div>
@@ -282,13 +254,13 @@ const MainContent = () => {
           <div className="space-y-4">
             {education.map((edu) => (
               <div key={edu.id} className="glass-card rounded-xl p-6">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <h3 className="font-semibold text-foreground">{edu.role}</h3>
-                    <p className="text-sm text-muted-foreground">{edu.company}</p>
+                <div className="flex items-start justify-between gap-3 flex-wrap">
+                  <div className="min-w-0">
+                    <h3 className="font-semibold text-foreground break-words">{edu.role}</h3>
+                    <p className="text-sm text-muted-foreground break-words">{edu.company}</p>
                     <p className="text-sm text-muted-foreground mt-2">{edu.description}</p>
                   </div>
-                  <span className="text-xs px-3 py-1 rounded-full bg-secondary/50 text-muted-foreground whitespace-nowrap">
+                  <span className="text-xs px-3 py-1 rounded-full bg-secondary/50 text-muted-foreground whitespace-nowrap shrink-0">
                     {edu.period}
                   </span>
                 </div>
