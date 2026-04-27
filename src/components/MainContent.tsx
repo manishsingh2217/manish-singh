@@ -128,17 +128,17 @@ const MainContent = () => {
               const Icon = getIcon(exp.icon);
               return (
                 <motion.div key={exp.id} whileHover={{ scale: 1.01 }} className="glass-card rounded-xl p-6 space-y-3">
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-lg bg-secondary/50 flex items-center justify-center">
+                  <div className="flex items-start justify-between gap-3 flex-wrap">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="w-10 h-10 rounded-lg bg-secondary/50 flex items-center justify-center shrink-0">
                         <Icon className="w-5 h-5 text-primary" />
                       </div>
-                      <div>
-                        <h3 className="font-semibold text-foreground">{exp.role}</h3>
-                        <p className="text-sm text-muted-foreground">{exp.company}</p>
+                      <div className="min-w-0">
+                        <h3 className="font-semibold text-foreground break-words">{exp.role}</h3>
+                        <p className="text-sm text-muted-foreground break-words">{exp.company}</p>
                       </div>
                     </div>
-                    <span className="text-xs px-3 py-1 rounded-full bg-secondary/50 text-muted-foreground">
+                    <span className="text-xs px-3 py-1 rounded-full bg-secondary/50 text-muted-foreground whitespace-nowrap shrink-0">
                       {exp.period}
                     </span>
                   </div>
