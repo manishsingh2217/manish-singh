@@ -95,35 +95,7 @@ const MainContent = () => {
                 <span className="text-foreground">Based in {personalInfo.location}</span>
               </h1>
 
-              <p className="text-muted-foreground text-lg max-w-3xl">{personalInfo.bio}</p>
-
-              {/* Stats */}
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 pt-4">
-                <div>
-                  <div className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-foreground">
-                    {personalInfo.stats_projects}+
-                  </div>
-                  <div className="text-xs sm:text-sm text-muted-foreground">Completed Projects</div>
-                </div>
-                <div>
-                  <div className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-foreground">
-                    {personalInfo.stats_experience}
-                  </div>
-                  <div className="text-xs sm:text-sm text-muted-foreground">Years of Experience</div>
-                </div>
-                <div>
-                  <div className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-foreground">
-                    {personalInfo.stats_clients}+
-                  </div>
-                  <div className="text-xs sm:text-sm text-muted-foreground">Happy Clients</div>
-                </div>
-                <div>
-                  <div className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-foreground">
-                    {personalInfo.stats_awards}+
-                  </div>
-                  <div className="text-xs sm:text-sm text-muted-foreground">Awards Received</div>
-                </div>
-              </div>
+              <p className="text-muted-foreground text-base sm:text-lg max-w-3xl">{personalInfo.bio}</p>
             </>
           )
         )}
