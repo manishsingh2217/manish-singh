@@ -254,13 +254,13 @@ const MainContent = () => {
           <div className="space-y-4">
             {education.map((edu) => (
               <div key={edu.id} className="glass-card rounded-xl p-6">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <h3 className="font-semibold text-foreground">{edu.role}</h3>
-                    <p className="text-sm text-muted-foreground">{edu.company}</p>
+                <div className="flex items-start justify-between gap-3 flex-wrap">
+                  <div className="min-w-0">
+                    <h3 className="font-semibold text-foreground break-words">{edu.role}</h3>
+                    <p className="text-sm text-muted-foreground break-words">{edu.company}</p>
                     <p className="text-sm text-muted-foreground mt-2">{edu.description}</p>
                   </div>
-                  <span className="text-xs px-3 py-1 rounded-full bg-secondary/50 text-muted-foreground whitespace-nowrap">
+                  <span className="text-xs px-3 py-1 rounded-full bg-secondary/50 text-muted-foreground whitespace-nowrap shrink-0">
                     {edu.period}
                   </span>
                 </div>
